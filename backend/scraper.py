@@ -22,7 +22,11 @@ def scrape_wikipedia(url: str):
     # Content
     content_div = soup.find('div', id='mw-content-text')
     if not content_div:
-        raise Exception("Could not find article content.")
+        # Fallback for mobile wikipedia or different themes
+        content_div = soup.find('div', id='bodyContent')
+        
+    if not content_div:
+        raise Exception("Could not find article content (tried 'mw-content-text' and 'bodyContent').")
 
     # Get all paragraphs for full text context (limit to first ~2000 words to avoid token limits if needed)
     paragraphs = content_div.find_all('p')
