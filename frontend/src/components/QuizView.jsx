@@ -19,7 +19,19 @@ const QuizView = () => {
             const result = await generateQuiz(url);
             setData(result);
         } catch (err) {
-            setError(err.response?.data?.detail || "Failed to generate quiz. Make sure the backend is running and the URL is valid.");
+            console.error("Quiz Generation Error:", err);
+            let errorMessage = "Failed to generate quiz.";
+
+            if (err.response) {
+                // Server responded with a status code outside 2xx
+                errorMessage = `Server Error (${err.response.status}): ${err.response.data?.detail || err.message}`;
+            } else if (err.request) {
+                // Request made but no response (network error)
+                errorMessage = "Network Error: Could not reach the backend. Please check if the backend is deployed and VITE_API_URL is correct.";
+            } else {
+                errorMessage = `Error: ${err.message}`;
+            }
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
