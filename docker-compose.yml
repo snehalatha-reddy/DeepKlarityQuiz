@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: quiz_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend/sql_app.db:/app/sql_app.db # Persist the SQLite database file
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: quiz_frontend
+    ports:
+      - "3000:80" # Map host 3000 to container 80 (standard for local dev to avoid conflicts)
+    depends_on:
+      - backend
+    restart: always
