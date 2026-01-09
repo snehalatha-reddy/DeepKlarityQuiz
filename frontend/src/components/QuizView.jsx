@@ -73,3 +73,4 @@ const QuizView = () => {
 };
 
 export default QuizView;
+
