@@ -29,6 +29,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def read_root():
+    return {"message": "DeepKlarity Quiz API is running!", "docs_url": "/docs"}
+
 @app.post("/generate_quiz", response_model=schemas.QuizResponse)
 def generate_quiz(request: schemas.QuizRequest, db: Session = Depends(get_db)):
     url = request.url
